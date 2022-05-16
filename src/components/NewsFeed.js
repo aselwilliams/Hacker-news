@@ -1,20 +1,14 @@
-import React from 'react'
+import React from 'react';
+import NewsCard from './NewsCard';
 
 const NewsFeed = ({handleDelete,news}) => {
   return (
     <div>
-           <>
-        {news.map((el)=>{
-            
+        {news.map((el)=>{ 
           return (
-            <div key={el.objectID} className='underline'>
-              <h3>{el.title}</h3>
-              <p>Author: {el.author}</p>
-              <button onClick={()=>handleDelete(el.objectID)} className='exit'>X</button>
-            </div>
+            <NewsCard el={el} handleDelete={handleDelete}/>
           )
         })}
-      </> 
     </div>
   )
 }
