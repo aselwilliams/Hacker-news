@@ -1,12 +1,25 @@
-import React from 'react'
-import '../App.css'
+import React from "react";
+import "../App.css";
 
 const LoadingIcon = () => {
   return (
     <div>
-        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      <div class="lds-spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoadingIcon
+export default LoadingIcon;

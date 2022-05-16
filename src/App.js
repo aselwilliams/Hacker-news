@@ -6,7 +6,6 @@ import LoadingIcon from "./components/LoadingIcon";
 import NewsFeed from "./components/NewsFeed";
 const api = "https://hn.algolia.com/api/v1/search?query=";
 
-
 export class App extends Component {
   constructor() {
     super();
@@ -18,34 +17,23 @@ export class App extends Component {
     };
   }
 
- 
-  componentDidMount() {
-    this.setState({ isLoading: true });
-    // this.getData()
-    // this.setState({isLoading:false})
+  getData = () => {
     axios
       .get(this.state.url)
-      .then((data) =>
-        this.setState({ news: data.data.hits, isLoading: false })
-      );
+      .then((data) => this.setState({ news: data.data.hits }));
+  };
+
+  componentDidMount() {
+    this.setState({ isLoading: true });
+    this.getData();
+    this.setState({ isLoading: false });
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.url !== this.state.url) {
-      // this.getData()
-      axios
-        .get(this.state.url)
-        .then((data) => this.setState({ news: data.data.hits }));
+      this.getData();
     }
   }
-
-  // getData=()=>{
-  //   axios
-  //   .get(this.state.url)
-  //   .then((data) =>
-  //     this.setState({ news: data.data.hits })
-  //   );
-  // }
 
   handleDelete = (id) => {
     const updatedList = this.state.news.filter((item) => item.objectID !== id);
@@ -62,6 +50,7 @@ export class App extends Component {
       url: `${api}${this.state.searchValue}`,
     });
   };
+
   render() {
     const { news, isLoading } = this.state;
     return (
@@ -70,10 +59,15 @@ export class App extends Component {
           <header>
             <h1>Hacker News</h1>
           </header>
-          <Form handleSubmit={this.handleSubmit} handleInputChange={this.handleInputChange} />
-          {isLoading ? 
+          <Form
+            handleSubmit={this.handleSubmit}
+            handleInputChange={this.handleInputChange}
+          />
+          {isLoading ? (
             <LoadingIcon />
-         :  <NewsFeed news={news} handleDelete={this.handleDelete}/>}
+          ) : (
+            <NewsFeed news={news} handleDelete={this.handleDelete} />
+          )}
         </div>
       </>
     );
