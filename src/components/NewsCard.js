@@ -1,10 +1,15 @@
 import React from "react";
 
-function NewsCard({ el, handleDelete }) {
+
+function NewsCard({ el, handleDelete,showUserInfo }) {
+  
+
+
+
   return (
     <div key={el.objectID} className="underline">
       <h3>{el.title}</h3>
-      <p>Author: {el.author}</p>
+      <p>Author:<span onClick={()=>showUserInfo(el.author)}>{el.author}</span> </p>
       <button onClick={() => handleDelete(el.objectID)} className="exit">
         X
       </button>

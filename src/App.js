@@ -1,57 +1,65 @@
 import axios from "axios";
 import "./App.css";
-import React, { Component } from "react";
+import Modal from './components/Modal'
+import React, { useState, useEffect} from "react";
 import Form from "./components/Form";
 import LoadingIcon from "./components/LoadingIcon";
 import NewsFeed from "./components/NewsFeed";
 const api = "https://hn.algolia.com/api/v1/search?query=";
+const userUrl='https://hn.algolia.com/api/v1/users/'
 
-export class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      news: [],
-      isLoading: false,
-      searchValue: "",
-      url: api,
-    };
-  }
-  getData = () => {
+function App() {
+ const [news, setNews]= useState([]);
+ const [isLoading, setIsLoading] =useState(false);
+ const [searchValue, setSearchValue] = useState('');
+ const [url, setUrl] = useState(api);
+ const [modal, setModal] =useState(false);
+ const [userInfo, setUserInfo] = useState({});
+ const [newUrl, setNewUrl]=useState(userUrl)
+  
+  const getData = () => {
     axios
-      .get(this.state.url)
-      .then((data) => this.setState({ news: data.data.hits }));
+      .get(url)
+      .then((data) => setNews(data.data.hits));
   };
 
-  componentDidMount() {
-    this.setState({ isLoading: true });
-    this.getData();
-    this.setState({ isLoading: false });
-  }
+  useEffect(()=>{
+     setIsLoading(true);
+    getData();
+    setIsLoading(false);
+  },[])
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.url !== this.state.url) {
-      this.getData();
-    }
-  }
+  useEffect(()=>{
+      getData();
+  },[url])
 
-  handleDelete = (id) => {
-    const updatedList = this.state.news.filter((item) => item.objectID !== id);
-    this.setState({ news: updatedList });
+  const handleDelete = (id) => {
+    const updatedList = news.filter((item) => item.objectID !== id);
+    setNews(updatedList);
   };
 
-  handleInputChange = (e) => {
-    this.setState({ searchValue: e.target.value });
+  const handleInputChange = (e) => {
+    setSearchValue(e.target.value);
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({
-      url: `${api}${this.state.searchValue}`,
-    });
-  };
+      setUrl(`${api}${searchValue}`)
+    };
+  
+    const showUserInfo=(username)=>{
+      console.log(username)
+      axios
+      .get(`${userUrl}${username}`)
+      .then((data) =>
+      setUserInfo(data.data));
+      setModal(true)
+      console.log(userInfo)
+    }
 
-  render() {
-    const { news, isLoading } = this.state;
+    const closeModal=()=>{
+      setModal(false)
+    }
     return (
       <>
         <div className="container">
@@ -59,18 +67,21 @@ export class App extends Component {
             <h1>Hacker News</h1>
           </header>
           <Form
-            handleSubmit={this.handleSubmit}
-            handleInputChange={this.handleInputChange}
+            handleSubmit={handleSubmit}
+            handleInputChange={handleInputChange}
           />
+          {modal ? <Modal userInfo={userInfo} closeModal={closeModal} />
+          : <>
           {isLoading ? (
             <LoadingIcon />
           ) : (
-            <NewsFeed news={news} handleDelete={this.handleDelete} />
+            <NewsFeed news={news} handleDelete={handleDelete} showUserInfo={showUserInfo} />
           )}
+ </> }
         </div>
       </>
     );
-  }
+  
 }
 
 export default App;

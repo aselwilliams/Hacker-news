@@ -20,6 +20,18 @@ input {
   padding: 10px;
   width: 400px;
 }
+span{
+  color:rgb(8, 8, 182);
+}
+.flex-btn{
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  padding:20px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 13px 5px rgba(238, 175, 166, 0.62);
+  margin-top: 20px;
+}
 .submit {
   padding: 9px 20px;
   background: rgb(8, 8, 182);
