@@ -16,7 +16,6 @@ export class App extends Component {
       url: api,
     };
   }
-
   getData = () => {
     axios
       .get(this.state.url)
